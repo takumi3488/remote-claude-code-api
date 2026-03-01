@@ -38,7 +38,7 @@ func (s *ClaudeServer) Run(ctx context.Context, req *v1.RunRequest) (*v1.RunResp
 		if err != nil {
 			return nil, connect.NewError(connect.CodeInternal, err)
 		}
-		defer os.RemoveAll(tmpDir)
+		defer func() { _ = os.RemoveAll(tmpDir) }()
 
 		cloneURL := buildCloneURL(req.Repository)
 		cloneCmd := exec.CommandContext(ctx, "git", "clone", "--depth=1", cloneURL, tmpDir)
