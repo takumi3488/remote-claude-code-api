@@ -4,12 +4,6 @@ A Connect RPC server that wraps Claude Code's `--remote` mode. Accepts requests 
 
 ## Usage
 
-### Run the server
-
-```bash
-PORT=8080 GITHUB_TOKEN=ghp_xxx go run .
-```
-
 ### Run with Docker
 
 ```bash
