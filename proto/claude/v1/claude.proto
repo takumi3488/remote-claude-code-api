@@ -1,0 +1,15 @@
+syntax = "proto3";
+package claude.v1;
+
+message RunRequest {
+  string prompt = 1;
+  string repository = 2;  // GitHub repository in "owner/repo" format
+}
+
+message RunResponse {
+  string output = 1;
+}
+
+service ClaudeService {
+  rpc Run(RunRequest) returns (RunResponse) {}
+}
