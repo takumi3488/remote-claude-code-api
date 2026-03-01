@@ -18,12 +18,12 @@ var repoPattern = regexp.MustCompile(`^[a-zA-Z0-9._-]+/[a-zA-Z0-9._-]+$`)
 
 type ClaudeServer struct{}
 
-func buildCloneURL(repo string) string {
-	token := os.Getenv("GITHUB_TOKEN")
-	if token != "" {
-		return "https://x-access-token:" + token + "@github.com/" + repo + ".git"
+func buildCloneArgs(repo, tmpDir string) []string {
+	args := []string{"clone", "--depth=1"}
+	if token := os.Getenv("GITHUB_TOKEN"); token != "" {
+		args = append(args, "-c", "http.extraheader=AUTHORIZATION: bearer "+token)
 	}
-	return "https://github.com/" + repo + ".git"
+	return append(args, "https://github.com/"+repo+".git", tmpDir)
 }
 
 func (s *ClaudeServer) Run(ctx context.Context, req *v1.RunRequest) (*v1.RunResponse, error) {
@@ -40,8 +40,8 @@ func (s *ClaudeServer) Run(ctx context.Context, req *v1.RunRequest) (*v1.RunResp
 		}
 		defer func() { _ = os.RemoveAll(tmpDir) }()
 
-		cloneURL := buildCloneURL(req.Repository)
-		cloneCmd := exec.CommandContext(ctx, "git", "clone", "--depth=1", cloneURL, tmpDir)
+		cloneArgs := buildCloneArgs(req.Repository, tmpDir)
+		cloneCmd := exec.CommandContext(ctx, "git", cloneArgs...)
 		if out, err := cloneCmd.CombinedOutput(); err != nil {
 			return nil, connect.NewError(connect.CodeNotFound, fmt.Errorf("git clone failed: %w\n%s", err, out))
 		}
