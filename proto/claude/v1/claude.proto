@@ -3,6 +3,7 @@ package claude.v1;
 
 message RunRequest {
   string prompt = 1;
+  string repository = 2;  // GitHub repository in "owner/repo" format
 }
 
 message RunResponse {

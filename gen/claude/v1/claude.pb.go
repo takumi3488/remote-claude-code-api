@@ -24,6 +24,7 @@ const (
 type RunRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Prompt        string                 `protobuf:"bytes,1,opt,name=prompt,proto3" json:"prompt,omitempty"`
+	Repository    string                 `protobuf:"bytes,2,opt,name=repository,proto3" json:"repository,omitempty"` // GitHub repository in "owner/repo" format
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -61,6 +62,13 @@ func (*RunRequest) Descriptor() ([]byte, []int) {
 func (x *RunRequest) GetPrompt() string {
 	if x != nil {
 		return x.Prompt
+	}
+	return ""
+}
+
+func (x *RunRequest) GetRepository() string {
+	if x != nil {
+		return x.Repository
 	}
 	return ""
 }
@@ -113,10 +121,13 @@ var File_claude_v1_claude_proto protoreflect.FileDescriptor
 
 const file_claude_v1_claude_proto_rawDesc = "" +
 	"\n" +
-	"\x16claude/v1/claude.proto\x12\tclaude.v1\"$\n" +
+	"\x16claude/v1/claude.proto\x12\tclaude.v1\"D\n" +
 	"\n" +
 	"RunRequest\x12\x16\n" +
-	"\x06prompt\x18\x01 \x01(\tR\x06prompt\"%\n" +
+	"\x06prompt\x18\x01 \x01(\tR\x06prompt\x12\x1e\n" +
+	"\n" +
+	"repository\x18\x02 \x01(\tR\n" +
+	"repository\"%\n" +
 	"\vRunResponse\x12\x16\n" +
 	"\x06output\x18\x01 \x01(\tR\x06output2G\n" +
 	"\rClaudeService\x126\n" +
